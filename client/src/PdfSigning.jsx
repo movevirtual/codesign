@@ -11,6 +11,7 @@ const PdfSigning = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [unsignedPdfData, setUnsignedPdfData] = useState(null);
   const [signedPdfData, setSignedPdfData] = useState(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const signatureCanvasRef = useRef(null);
   const [signaturePosition, setSignaturePosition] = useState({
     x: null,
@@ -86,11 +87,8 @@ const PdfSigning = () => {
     setSignatureType(e.target.value);
   };
 
-  const handleDrag = (e, { deltaX, deltaY }) => {
-    setSignaturePosition((prevPosition) => ({
-      x: prevPosition.x + deltaX,
-      y: prevPosition.y + deltaY,
-    }));
+  const onStop = (event, data) => {
+    setPosition({ x: data.x, y: data.y });
   };
 
   return (
@@ -101,12 +99,23 @@ const PdfSigning = () => {
       {selectedFile && !unsignedPdfData && !signedPdfData && (
         <div>
           <Document file={URL.createObjectURL(selectedFile)}>
-            <MemoizedPage
-              pageNumber={1}
-              onClick={handlePdfClick}
-              signaturePosition={signaturePosition}
-              handleDrag={handleDrag}
-            />
+            <Page pageNumber={1} onClick={handlePdfClick}>
+              <Draggable onStop={onStop}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: position.y, // Updated Y position
+                    left: position.x, // Updated X position
+                    width: 300,
+                    height: 50,
+                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                    zIndex: 100,
+                  }}
+                >
+                  Draggable signature placeholder
+                </div>
+              </Draggable>
+            </Page>
           </Document>
           <br />
         </div>
@@ -171,36 +180,12 @@ const PdfSigning = () => {
             file={{ data: signedPdfData }}
             onLoadError={(error) => console.error("Error loading PDF:", error)}
           >
-            <MemoizedPage pageNumber={1} />
+            <Page pageNumber={1} />
           </Document>
         </div>
       )}
     </div>
   );
 };
-
-const MemoizedPage = React.memo(
-  ({ pageNumber, onClick, signaturePosition, handleDrag }) => (
-    <Page pageNumber={pageNumber} onClick={onClick}>
-      <Draggable
-        position={signaturePosition}
-        onDrag={handleDrag}
-        bounds="parent"
-      >
-        <div
-          style={{
-            position: "absolute",
-            left: -50,
-            top: -25,
-            width: 100,
-            height: 50,
-            border: "2px solid red",
-            background: "transparent",
-          }}
-        />
-      </Draggable>
-    </Page>
-  )
-);
 
 export default PdfSigning;

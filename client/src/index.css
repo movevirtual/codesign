@@ -12,7 +12,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(1px);
     background-color: #12121280;
     z-index: 9999;
   }
