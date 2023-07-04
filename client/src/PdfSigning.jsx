@@ -101,9 +101,11 @@ const PdfSigning = () => {
   };
 
   return (
-    <div>
-      <h2>PDF Signing</h2>
-      <input type="file" accept=".pdf" onChange={handleFileChange} />
+    <div className="flex flex-col items-center justify-center relative">
+      <h2 className="font-bold text-xl py-5">PDF Signing</h2>
+      <div className="ring-1 p-10 rounded-xl">
+        <input type="file" accept=".pdf" onChange={handleFileChange} />
+      </div>
       <br />
       {selectedFile && !unsignedPdfData && !signedPdfData && (
         <div>
