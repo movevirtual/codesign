@@ -60,7 +60,7 @@ const PdfSigning = () => {
 
       page.drawImage(signatureImage, {
         x: x - signatureWidth / 2,
-        y: height - (y + signatureHeight / 2),
+        y: height - y - signatureHeight / 2, // Adjust for the PDF's coordinate system
         width: signatureWidth,
         height: signatureHeight,
       });
@@ -74,8 +74,17 @@ const PdfSigning = () => {
   };
 
   const handlePdfClick = (event) => {
-    const { pageX, pageY } = event;
-    setSignaturePosition({ x: pageX, y: pageY });
+    // Consider the dimensions of your draggable placeholder
+    const placeholderWidth = 300;
+    const placeholderHeight = 50;
+
+    // Adjust the signature position to be at the center of the placeholder
+    const centeredPosition = {
+      x: position.x + placeholderWidth / 2,
+      y: position.y + placeholderHeight / 2,
+    };
+
+    setSignaturePosition(centeredPosition);
     setShowCanvasPopup(true);
   };
 
