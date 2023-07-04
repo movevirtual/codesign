@@ -97,7 +97,7 @@ const PdfSigning = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center relative">
+    <div className="flex flex-col items-center justify-center pb-10">
       <h2 className="font-bold text-xl py-5">PDF Signing</h2>
       <div className="ring-1 p-10 rounded-xl">
         <input type="file" accept=".pdf" onChange={handleFileChange} />
